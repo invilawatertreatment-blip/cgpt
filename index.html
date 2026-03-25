@@ -18,15 +18,19 @@
       --muted: #475569;
       --muted-2: #64748b;
       --line: rgba(15, 23, 42, 0.08);
+      --line-2: rgba(15, 23, 42, 0.05);
       --blue: #2563eb;
       --cyan: #06b6d4;
       --green: #10b981;
+      --red: #ef4444;
       --rose: #f43f5e;
       --shadow-lg: 0 24px 80px rgba(15, 23, 42, 0.14);
       --shadow-md: 0 18px 50px rgba(15, 23, 42, 0.08);
+      --shadow-sm: 0 10px 24px rgba(15, 23, 42, 0.04);
       --radius-xl: 34px;
       --radius-lg: 24px;
-      --max: 1180px;
+      --radius-md: 18px;
+      --max: 1240px;
     }
 
     * { box-sizing: border-box; }
@@ -42,10 +46,11 @@
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      -webkit-tap-highlight-color: transparent;
     }
 
     a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
+    img, video { max-width: 100%; display: block; }
     button, input { font: inherit; }
 
     .font-display { font-family: "Plus Jakarta Sans", "Inter", sans-serif; }
@@ -58,27 +63,27 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(15, 23, 42, 0.06);
     }
 
     .nav {
-      min-height: 84px;
+      min-height: 82px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 18px;
     }
 
     .brand {
-      font-weight: 900;
-      letter-spacing: -0.06em;
-      font-size: 32px;
-      line-height: 1;
-      text-transform: uppercase;
       display: inline-flex;
       align-items: flex-start;
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
       color: var(--navy);
     }
 
@@ -103,10 +108,8 @@
 
     .nav-links a:hover { color: var(--blue); }
 
-    .nav-cta,
     .button,
     .button-secondary,
-    .button-ghost,
     .button-pdf,
     .button-sync {
       display: inline-flex;
@@ -120,23 +123,8 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
       cursor: pointer;
-    }
-
-    .nav-cta,
-    .button-secondary:hover,
-    .button:hover,
-    .button-ghost:hover,
-    .button-pdf:hover,
-    .button-sync.is-dirty:hover { transform: translateY(-2px); }
-
-    .nav-cta {
-      color: #fff;
-      min-height: 52px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--blue), var(--cyan));
-      box-shadow: 0 16px 36px rgba(37, 99, 235, 0.22);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     }
 
     .button {
@@ -150,12 +138,6 @@
       background: #fff;
       border-color: rgba(15, 23, 42, 0.1);
       box-shadow: var(--shadow-md);
-    }
-
-    .button-ghost {
-      color: var(--blue);
-      background: rgba(37, 99, 235, 0.07);
-      border-color: rgba(37, 99, 235, 0.12);
     }
 
     .button-pdf {
@@ -176,6 +158,15 @@
       background: #67e8f9;
       border-color: transparent;
       cursor: pointer;
+    }
+
+    @media (hover:hover) and (pointer:fine) {
+      .button:hover,
+      .button-secondary:hover,
+      .button-pdf:hover,
+      .button-sync.is-dirty:hover {
+        transform: translateY(-2px);
+      }
     }
 
     .eyebrow {
@@ -221,30 +212,126 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-      gap: 36px;
-      align-items: center;
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.95fr);
+      gap: 34px;
+      align-items: start;
     }
 
     .hero-copy h1 {
-      margin: 18px 0 20px;
-      font-size: clamp(42px, 7vw, 78px);
+      margin: 18px 0 18px;
+      font-size: clamp(42px, 7vw, 80px);
       line-height: 1.02;
       letter-spacing: -0.08em;
       color: var(--navy);
     }
 
-    .hero-copy p,
-    .section-head p,
-    .cta-box p {
+    .hero-intro {
+      margin: 0 0 28px;
+      max-width: 690px;
       font-size: 20px;
       line-height: 1.8;
       color: var(--muted);
     }
 
-    .hero-copy p {
-      max-width: 650px;
-      margin: 0 0 28px;
+    .hero-cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin: 24px 0 24px;
+    }
+
+    .hero-card,
+    .hero-panel,
+    .panel,
+    .step-card,
+    .reference-card,
+    .cta-box,
+    .ecosystem-card {
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      padding: 28px;
+      border-radius: 28px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    @media (hover:hover) and (pointer:fine) {
+      .hero-card:hover { border-color: rgba(37, 99, 235, 0.18); box-shadow: var(--shadow-lg); }
+    }
+
+    .hero-card .card-kicker {
+      display: inline-flex;
+      margin-bottom: 12px;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .hero-card .card-kicker.accent { color: var(--blue); }
+
+    .hero-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .risk-list,
+    .build-tags {
+      display: grid;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .risk-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #eef2f7;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .risk-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      flex: 0 0 auto;
+    }
+
+    .build-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .build-tag {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
     }
 
     .hero-actions,
@@ -282,23 +369,14 @@
       font-weight: 900;
     }
 
-    .hero-panel,
-    .panel,
-    .step-card,
-    .reference-card,
-    .cta-box {
-      background: #fff;
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: var(--shadow-md);
-    }
-
     .hero-panel {
       position: relative;
-      border-radius: 36px;
-      padding: 22px;
+      border-radius: 34px;
+      padding: 20px;
       overflow: hidden;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.88));
       box-shadow: var(--shadow-lg);
+      min-height: 100%;
     }
 
     .hero-panel::after {
@@ -322,6 +400,7 @@
       margin-bottom: 16px;
     }
 
+    .hero-visual video,
     .hero-visual img {
       width: 100%;
       height: 100%;
@@ -360,46 +439,26 @@
     .cards-3,
     .reference-grid,
     .stats-row,
-    .result-grid {
+    .result-grid,
+    .ecosystem-grid {
       display: grid;
       gap: 18px;
     }
 
     .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-
-    .logo-marquee {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
-      -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
-    }
-
-    .logo-track {
-      display: flex;
-      width: max-content;
-      animation: logo-marquee 34s linear infinite;
-      will-change: transform;
-    }
-
-    .logo-group {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      padding-right: 14px;
-      flex-shrink: 0;
-    }
     .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .reference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
     .stats-row { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 34px; }
     .result-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .ecosystem-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; }
 
     .metric,
     .logo-pill,
     .result-card,
-    .stat-card {
+    .stat-card,
+    .ecosystem-card {
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+      box-shadow: var(--shadow-sm);
     }
 
     .metric {
@@ -434,6 +493,29 @@
       background: rgba(248, 250, 252, 0.82);
     }
 
+    .logo-marquee {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    }
+
+    .logo-track {
+      display: flex;
+      width: max-content;
+      animation: logo-marquee 34s linear infinite;
+      will-change: transform;
+    }
+
+    .logo-group {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding-right: 14px;
+      flex-shrink: 0;
+    }
+
     .logo-pill {
       min-height: 58px;
       min-width: 186px;
@@ -457,13 +539,16 @@
       height: auto;
       object-fit: contain;
       filter: grayscale(1);
-      opacity: 0.82;
+      opacity: 0.78;
       transition: opacity 0.25s ease, filter 0.25s ease;
     }
 
-    .logo-pill:hover img {
-      filter: grayscale(0);
-      opacity: 1;
+    @media (hover:hover) and (pointer:fine) {
+      .logo-marquee:hover .logo-track { animation-play-state: paused; }
+      .logo-pill:hover img {
+        filter: grayscale(0);
+        opacity: 1;
+      }
     }
 
     section { padding: 96px 0; }
@@ -471,6 +556,11 @@
     .section-head {
       max-width: 860px;
       margin-bottom: 28px;
+    }
+
+    .section-head.center {
+      text-align: center;
+      margin-inline: auto;
     }
 
     .section-head .kicker {
@@ -483,7 +573,8 @@
     }
 
     .section-head h2,
-    .cta-box h2 {
+    .cta-box h2,
+    .ecosystem-head h2 {
       margin: 0 0 16px;
       font-size: clamp(34px, 5vw, 60px);
       line-height: 1.06;
@@ -491,86 +582,116 @@
       color: var(--navy);
     }
 
-    .economics-grid,
-    .audit-grid {
-      display: grid;
-      gap: 28px;
-      align-items: center;
-      margin-top: 36px;
+    .section-head p,
+    .cta-box p,
+    .ecosystem-head p {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.8;
+      color: var(--muted);
     }
 
-    .economics-grid {
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
-    }
-
-    .audit-grid {
-      grid-template-columns: 400px minmax(0, 1fr);
-      gap: 22px;
-      align-items: start;
-      margin-top: 30px;
-    }
-
-    .panel {
-      border-radius: var(--radius-xl);
+    .economics {
       overflow: hidden;
     }
 
-    .panel.soft { background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(248,250,252,0.94)); }
-    .pad-xl { padding: 40px; }
-
-    .lens-list {
+    .economics-grid {
       display: grid;
-      gap: 18px;
+      grid-template-columns: minmax(300px, 0.88fr) minmax(0, 1.12fr);
+      gap: 34px;
+      align-items: start;
       margin-top: 28px;
     }
 
-    .lens-item {
+    .economics-visual {
+      position: relative;
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+    }
+
+    .economics-text {
+      position: relative;
+      display: grid;
+      gap: 18px;
+    }
+
+    .economics-line {
+      position: absolute;
+      left: 27px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #eef2f7;
+      z-index: 0;
+    }
+
+    .dna-card {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: 56px 1fr;
       gap: 16px;
       align-items: start;
+      padding: 18px;
+      border-radius: 28px;
+      transition: background 0.25s ease, border-color 0.25s ease;
+      border: 1px solid transparent;
     }
 
-    .lens-icon {
+    @media (hover:hover) and (pointer:fine) {
+      .dna-card:hover {
+        background: rgba(248, 250, 252, 0.8);
+        border-color: #eef2f7;
+      }
+    }
+
+    .dna-icon {
       width: 56px;
       height: 56px;
       border-radius: 18px;
       display: grid;
       place-items: center;
-      font-size: 22px;
       color: #fff;
+      font-size: 22px;
       font-weight: 900;
       box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+      position: relative;
+      z-index: 1;
     }
 
-    .lens-icon.blue { background: linear-gradient(135deg, var(--blue), var(--cyan)); }
-    .lens-icon.indigo { background: linear-gradient(135deg, #4f46e5, #6366f1); }
-    .lens-icon.green { background: linear-gradient(135deg, #059669, #10b981); }
+    .dna-icon.red { background: linear-gradient(135deg, #ef4444, #f97316); }
+    .dna-icon.blue { background: linear-gradient(135deg, #2563eb, #06b6d4); }
+    .dna-icon.green { background: linear-gradient(135deg, #059669, #10b981); }
 
-    .lens-item h3,
-    .step-card h3,
-    .reference-body h3 {
-      margin: 0 0 10px;
+    .dna-copy h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.25;
       color: var(--navy);
     }
 
-    .lens-item h3 { font-size: 20px; line-height: 1.3; }
-    .step-card h3 { font-size: 22px; line-height: 1.3; }
-    .reference-body h3 { font-size: 24px; line-height: 1.22; }
+    .dna-copy h3 span {
+      font-size: 16px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
 
-    .lens-item p,
-    .step-card p,
-    .reference-body p,
-    .audit-note {
+    .dna-copy h3 .red { color: var(--red); }
+    .dna-copy h3 .blue { color: var(--blue); }
+    .dna-copy h3 .green { color: var(--green); }
+
+    .dna-copy p {
       margin: 0;
       color: var(--muted);
       line-height: 1.8;
       font-size: 16px;
+      font-style: italic;
     }
 
     .orbit-card {
       position: relative;
-      min-height: 420px;
+      min-height: 460px;
       display: grid;
       place-items: center;
       background: linear-gradient(180deg, #f8fbff, #ffffff);
@@ -579,6 +700,9 @@
       contain: layout paint;
       -webkit-transform: translateZ(0);
       transform: translateZ(0);
+      border-radius: 34px;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: var(--shadow-md);
     }
 
     .orbit-stage {
@@ -621,25 +745,6 @@
     .orbit-wrapper.two { animation-duration: 15s; animation-direction: reverse; }
     .orbit-wrapper.three { animation-duration: 18s; }
 
-    .orbit-core {
-      position: relative;
-      z-index: 2;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      color: var(--navy);
-      font-weight: 900;
-      font-size: 22px;
-      line-height: 1.2;
-      letter-spacing: -0.04em;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: var(--shadow-md);
-    }
-
     .ring {
       position: absolute;
       border-radius: 50%;
@@ -654,7 +759,7 @@
       height: 220px;
       left: -128px;
       top: -106px;
-      border: 2px solid rgba(37, 99, 235, 0.62);
+      border: 2px solid rgba(239, 68, 68, 0.52);
     }
 
     .orbit-wrapper.two .ring {
@@ -670,28 +775,58 @@
       height: 380px;
       left: -204px;
       top: -174px;
-      border: 2px solid rgba(99, 102, 241, 0.48);
+      border: 2px solid rgba(37, 99, 235, 0.42);
     }
 
-    .orbit-label {
+    .orbit-core {
+      position: relative;
+      z-index: 2;
+      width: 184px;
+      height: 184px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 22px;
+      line-height: 1.18;
+      letter-spacing: -0.04em;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: var(--shadow-md);
+    }
+
+    .orbit-center-labels {
       position: absolute;
+      inset: 0;
       z-index: 3;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+
+    .orbit-pill {
+      position: absolute;
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.94);
       border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      opacity: 0;
+      animation: pill-fade 9s infinite;
+      white-space: nowrap;
     }
 
-    .orbit-label.top { top: 44px; color: var(--blue); }
-    .orbit-label.right { right: 18px; color: var(--green); }
-    .orbit-label.bottom { bottom: 48px; color: #6366f1; }
+    .orbit-pill.efficiency { color: var(--red); animation-delay: 0s; }
+    .orbit-pill.resilience { color: var(--blue); animation-delay: 3s; }
+    .orbit-pill.sustainability { color: var(--green); animation-delay: 6s; }
 
-    .stat-card {
+    .stats-row .stat-card {
       padding: 24px;
       border-radius: 999px;
       min-height: 180px;
@@ -703,6 +838,16 @@
       background: #fff;
     }
 
+    .stats-row .stat-card.dark {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .stats-row .stat-card.blue {
+      background: var(--blue);
+      color: #fff;
+    }
+
     .stat-card strong {
       font-size: 40px;
       line-height: 1;
@@ -710,6 +855,9 @@
       letter-spacing: -0.06em;
       margin-bottom: 8px;
     }
+
+    .stat-card.blue strong,
+    .stat-card.dark strong { color: inherit; }
 
     .stat-card small,
     .step-output {
@@ -721,6 +869,9 @@
       line-height: 1.8;
     }
 
+    .stat-card.blue small,
+    .stat-card.dark small { color: rgba(255,255,255,0.72); }
+
     .pathway {
       background: linear-gradient(180deg, #f8fafc, #f1f5f9);
       border-top: 1px solid rgba(15, 23, 42, 0.05);
@@ -729,12 +880,14 @@
 
     .step-card,
     .reference-card,
-    .cta-box {
+    .cta-box,
+    .ecosystem-card {
       border-radius: 34px;
       overflow: hidden;
     }
 
     .step-card { padding: 34px; }
+
     .step-number {
       width: 58px;
       height: 58px;
@@ -746,6 +899,27 @@
       font-size: 22px;
       font-weight: 900;
       margin-bottom: 26px;
+    }
+
+    .step-card h3,
+    .reference-body h3,
+    .ecosystem-card h3 {
+      margin: 0 0 10px;
+      color: var(--navy);
+    }
+
+    .step-card h3 { font-size: 22px; line-height: 1.3; }
+    .reference-body h3 { font-size: 24px; line-height: 1.22; }
+    .ecosystem-card h3 { font-size: 14px; line-height: 1.4; text-transform: uppercase; letter-spacing: 0.12em; }
+
+    .step-card p,
+    .reference-body p,
+    .audit-note,
+    .ecosystem-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 16px;
     }
 
     .step-output {
@@ -770,7 +944,9 @@
       transition: transform 0.5s ease;
     }
 
-    .reference-card:hover .reference-media img { transform: scale(1.04); }
+    @media (hover:hover) and (pointer:fine) {
+      .reference-card:hover .reference-media img { transform: scale(1.04); }
+    }
 
     .reference-badge {
       position: absolute;
@@ -780,7 +956,7 @@
       align-items: center;
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.94);
       border: 1px solid rgba(15, 23, 42, 0.06);
       color: var(--navy);
       font-size: 12px;
@@ -790,6 +966,51 @@
     }
 
     .reference-body { padding: 28px; }
+
+    .ecosystem {
+      border-top: 1px solid rgba(15, 23, 42, 0.05);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+      background: #fff;
+    }
+
+    .ecosystem-head {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      text-align: center;
+    }
+
+    .ecosystem-card {
+      padding: 18px;
+      display: grid;
+      justify-items: center;
+      text-align: center;
+      min-height: 132px;
+      align-content: center;
+      gap: 10px;
+    }
+
+    .ecosystem-card .logo-pill {
+      min-width: auto;
+      min-height: 60px;
+      width: 100%;
+      padding: 10px 14px;
+      box-shadow: none;
+      border-color: #eef2f7;
+    }
+
+    .ecosystem-card .logo-pill img {
+      filter: grayscale(0);
+      opacity: 1;
+      max-height: 34px;
+    }
+
+    .ecosystem-card p {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--muted-2);
+      font-weight: 800;
+    }
 
     .audit {
       background: linear-gradient(180deg, #020617, #0b1120);
@@ -809,13 +1030,19 @@
       pointer-events: none;
     }
 
+    .audit .section-head .kicker { color: #67e8f9; }
     .audit .section-head h2,
     .audit .section-head p,
-    .audit .section-head .kicker,
-    .audit-note { color: inherit; }
-    .audit .section-head .kicker { color: #67e8f9; }
-    .audit .section-head p,
-    .audit-note { color: rgba(255,255,255,0.72); }
+    .audit-note { color: rgba(255,255,255,0.76); }
+    .audit .section-head h2 { color: #fff; }
+
+    .audit-grid {
+      display: grid;
+      grid-template-columns: 400px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+      margin-top: 30px;
+    }
 
     .glass,
     .hero-result,
@@ -937,6 +1164,7 @@
     .result-card.cyan strong { color: #67e8f9; }
 
     .cta-section { padding-top: 0; }
+
     .cta-box {
       padding: 42px;
       background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(16, 185, 129, 0.08));
@@ -992,18 +1220,7 @@
 
     .reveal {
       opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      transform: none;
     }
 
     @keyframes orbit-spin {
@@ -1016,13 +1233,23 @@
       to { transform: translateX(-50%); }
     }
 
+    @keyframes pill-fade {
+      0%, 25% { opacity: 0; transform: translateY(10px) scale(0.94); }
+      33%, 58% { opacity: 1; transform: translateY(0) scale(1); }
+      66%, 100% { opacity: 0; transform: translateY(-10px) scale(1.04); }
+    }
+
     @media (max-width: 1080px) {
       .hero-grid,
       .economics-grid,
       .audit-grid { grid-template-columns: 1fr; }
-      .hero-copy p,
+
+      .hero-intro,
       .section-head p,
-      .cta-box p { font-size: 18px; }
+      .cta-box p,
+      .ecosystem-head p { font-size: 18px; }
+
+      .ecosystem-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     @media (max-width: 900px) {
@@ -1031,22 +1258,23 @@
       .reference-grid,
       .result-grid,
       .stats-row,
-      .metrics { grid-template-columns: 1fr; }
-      .logo-pill {
-        min-width: 168px;
-      }
-      .logo-track {
-        animation-duration: 30s;
-      }
+      .metrics,
+      .hero-cards { grid-template-columns: 1fr; }
+      .ecosystem-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .logo-pill { min-width: 168px; }
+      .logo-track { animation-duration: 30s; }
       .nav-links { display: none; }
       .hero { padding-top: 48px; }
+      .hero-card,
       .hero-panel,
       .panel,
       .step-card,
       .glass,
       .hero-result,
-      .cta-box { padding: 24px; }
-      .orbit-card { min-height: 360px; }
+      .cta-box,
+      .ecosystem-card { padding: 24px; }
+      .economics-visual { min-height: 380px; }
+      .orbit-card { min-height: 380px; }
       .orbit-stage,
       .orbit-assembly { inset: 12px; border-radius: 28px; }
       .orbit-core {
@@ -1072,35 +1300,31 @@
         left: -170px;
         top: -144px;
       }
-      .orbit-label {
+      .orbit-pill {
         font-size: 11px;
         padding: 9px 12px;
       }
-      .orbit-label.top { top: 34px; }
-      .orbit-label.right { right: 10px; }
-      .orbit-label.bottom { bottom: 36px; }
+      .trust-row { gap: 14px; }
+      .economics-line { display: none; }
     }
 
     @media (max-width: 640px) {
       .container { width: min(calc(100% - 24px), var(--max)); }
       .brand, .footer-brand { font-size: 28px; }
       .hero-copy h1 { font-size: clamp(38px, 12vw, 58px); }
-      .hero-copy p,
+      .hero-intro,
       .section-head p,
       .cta-box p,
-      .audit-note { font-size: 16px; }
+      .audit-note,
+      .ecosystem-head p { font-size: 16px; }
       .hero-actions,
       .cta-row,
       .audit-actions { flex-direction: column; }
       .button,
       .button-secondary,
-      .button-ghost,
       .button-pdf,
-      .button-sync,
-      .nav-cta { width: 100%; }
-      .logo-track {
-        animation-duration: 24s;
-      }
+      .button-sync { width: 100%; }
+      .logo-track { animation-duration: 24s; }
       .logo-pill {
         min-height: 54px;
         min-width: 148px;
@@ -1110,6 +1334,7 @@
       .stat-card { min-height: 156px; border-radius: 32px; }
       .hero-result h3 { font-size: clamp(42px, 14vw, 70px); }
       .input-group input { height: 68px; font-size: 28px; }
+      .economics-visual { min-height: 320px; }
       .orbit-card { min-height: 320px; }
       .orbit-stage,
       .orbit-assembly { inset: 10px; border-radius: 24px; }
@@ -1136,25 +1361,34 @@
         left: -146px;
         top: -122px;
       }
-      .orbit-label {
+      .orbit-pill {
         font-size: 10px;
         padding: 8px 11px;
         letter-spacing: 0.1em;
       }
-      .orbit-label.top {
-        top: 28px;
-        left: 50%;
-        transform: translateX(-50%);
+      .ecosystem-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .ecosystem-card { min-height: 118px; padding: 14px; }
+      .ecosystem-card .logo-pill { min-height: 54px; }
+      .ecosystem-card .logo-pill img { max-height: 28px; }
+      .dna-card {
+        grid-template-columns: 48px 1fr;
+        gap: 14px;
+        padding: 14px;
       }
-      .orbit-label.right {
-        right: 6px;
-        top: 50%;
-        transform: translateY(-50%);
+      .dna-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+        border-radius: 16px;
       }
-      .orbit-label.bottom {
-        bottom: 26px;
-        left: 50%;
-        transform: translateX(-50%);
+      .dna-copy h3 {
+        font-size: 20px;
+      }
+      .dna-copy h3 span {
+        display: block;
+        margin-left: 0;
+        margin-top: 4px;
+        font-size: 13px;
       }
     }
   </style>
@@ -1171,7 +1405,7 @@
         <a href="#projects" data-scroll="true">Stories</a>
         <a href="#audit" data-scroll="true">Intelligence</a>
       </nav>
-</div>
+    </div>
   </header>
 
   <main id="top">
@@ -1180,11 +1414,45 @@
         <div class="hero-copy reveal">
           <span class="eyebrow">Water-as-a-Service Model</span>
           <h1 class="font-display">Mengubah air industri menjadi nilai strategis.</h1>
-          <p>
+          <p class="hero-intro">
             Melalui pendekatan <strong>Zero-CapEx</strong> dan model <strong>Water-as-a-Service</strong>,
             Invila™ membantu fasilitas industri menekan biaya air, mengurangi risiko pasokan,
             dan mempercepat transformasi utilitas menjadi sistem yang lebih efisien, tangguh, dan terukur.
           </p>
+
+          <div class="hero-cards">
+            <article class="hero-card">
+              <span class="card-kicker">Risk Factors</span>
+              <p>
+                Air kini bertransformasi menjadi <strong>risiko finansial yang mengancam margin</strong>
+                melalui kualitas yang tidak pasti, tekanan tarif PDAM, dan biaya pengelolaan limbah.
+              </p>
+              <div class="risk-list">
+                <div class="risk-item"><span class="risk-dot"></span> Kualitas tidak pasti</div>
+                <div class="risk-item"><span class="risk-dot"></span> Kenaikan tarif PDAM</div>
+                <div class="risk-item"><span class="risk-dot"></span> Tarif limbah WWTP</div>
+              </div>
+            </article>
+
+            <article class="hero-card">
+              <span class="card-kicker accent">Zero-CapEx Solution</span>
+              <p>
+                Layanan air industri yang lebih terukur dan lebih ringan secara finansial untuk
+                <strong>melindungi arus kas</strong> dan mempercepat keputusan implementasi.
+              </p>
+              <div class="build-tags">
+                <div class="build-tag-row">
+                  <span class="build-tag">Build</span>
+                  <span class="build-tag">Finance</span>
+                  <span class="build-tag">Operate</span>
+                </div>
+                <p style="margin:0; color:var(--muted); font-size:14px; line-height:1.8;">
+                  Invila™ membangun, membiayai, dan mengoperasikan sistem air Anda secara end-to-end.
+                </p>
+              </div>
+            </article>
+          </div>
+
           <div class="hero-actions">
             <a href="#audit" class="button" data-scroll="true">Mulai Audit</a>
           </div>
@@ -1197,8 +1465,11 @@
 
         <aside class="hero-panel reveal" aria-label="Ringkasan kinerja">
           <div class="hero-visual">
-            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80" alt="Fasilitas industri dan infrastruktur air modern" />
-            <div class="live-badge">Invila Intelligence Live</div>
+            <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80">
+              <source src="kiw-industrial-project-video.mp4" type="video/mp4">
+              <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80" alt="Fasilitas industri dan infrastruktur air modern" />
+            </video>
+            <div class="live-badge">DECN-IV™ Live</div>
           </div>
           <div class="metrics">
             <div class="metric">
@@ -1251,62 +1522,58 @@
       </div>
     </section>
 
-    <section id="economics">
+    <section id="economics" class="economics">
       <div class="container">
         <div class="section-head reveal">
           <p class="kicker">Economics of Water</p>
-          <h2 class="font-display">Transformasi dari utilitas menjadi aset strategis.</h2>
+          <h2 class="font-display">Transformasi utilitas menjadi aset strategis.</h2>
           <p>
             Untuk fasilitas industri modern, air bukan lagi utilitas pendukung. Ia langsung memengaruhi
             struktur biaya produksi, kontinuitas operasi, kepatuhan lingkungan, dan daya saing bisnis.
-            Karena itu, pengelolaan air perlu dibaca sebagai keputusan ekonomi, bukan sekadar keputusan teknis.
           </p>
         </div>
 
         <div class="economics-grid">
-          <div class="panel soft pad-xl reveal">
-            <p style="margin:0; font-size:18px; line-height:1.9; color:var(--muted);">
-              Tekanan dari pembatasan Air Bawah Tanah, volatilitas tarif PDAM, kebutuhan efisiensi energi,
-              dan tuntutan regulasi kini membuat sistem air menjadi salah satu elemen yang paling menentukan
-              kestabilan operasional. Di Invila™, pengelolaan air dianalisis melalui tiga lensa strategis berikut.
-            </p>
-
-            <div class="lens-list">
-              <div class="lens-item">
-                <div class="lens-icon blue">1</div>
-                <div>
-                  <h3>Efficiency · Lensa Biaya</h3>
-                  <p>Menemukan titik inefisiensi yang membebani biaya produksi, lalu mengoptimalkan tiap meter kubik air agar memberi nilai ekonomi yang lebih tinggi.</p>
-                </div>
+          <div class="economics-visual reveal">
+            <div class="orbit-card" aria-hidden="true">
+              <div class="orbit-stage"></div>
+              <div class="orbit-assembly">
+                <div class="orbit-wrapper one"><div class="ring"></div></div>
+                <div class="orbit-wrapper two"><div class="ring"></div></div>
+                <div class="orbit-wrapper three"><div class="ring"></div></div>
               </div>
-              <div class="lens-item">
-                <div class="lens-icon indigo">2</div>
-                <div>
-                  <h3>Resilience · Lensa Stabilitas</h3>
-                  <p>Membangun ketahanan sistem terhadap gangguan pasokan eksternal sehingga operasi tetap berjalan dengan risiko interupsi yang lebih rendah.</p>
-                </div>
+              <div class="orbit-center-labels">
+                <div class="orbit-pill efficiency">Efficiency</div>
+                <div class="orbit-pill resilience">Resilience</div>
+                <div class="orbit-pill sustainability">Sustainability</div>
               </div>
-              <div class="lens-item">
-                <div class="lens-icon green">3</div>
-                <div>
-                  <h3>Sustainability · Lensa Pertumbuhan</h3>
-                  <p>Menyelaraskan profit, kepatuhan, dan kelestarian lingkungan melalui sistem air yang lebih efisien, terukur, dan siap berkembang bersama bisnis.</p>
-                </div>
-              </div>
+              <div class="orbit-core font-display">Invila™<br>Water Economics</div>
             </div>
           </div>
 
-          <div class="panel orbit-card reveal" aria-hidden="true">
-            <div class="orbit-stage"></div>
-            <div class="orbit-assembly">
-              <div class="orbit-wrapper one"><div class="ring"></div></div>
-              <div class="orbit-wrapper two"><div class="ring"></div></div>
-              <div class="orbit-wrapper three"><div class="ring"></div></div>
-            </div>
-            <div class="orbit-label top">Efficiency</div>
-            <div class="orbit-label right">Sustainability</div>
-            <div class="orbit-label bottom">Resilience</div>
-            <div class="orbit-core font-display">Invila™<br>Water Economics</div>
+          <div class="economics-text reveal">
+            <div class="economics-line"></div>
+            <article class="dna-card">
+              <div class="dna-icon red">1</div>
+              <div class="dna-copy">
+                <h3>Efficiency <span class="red">[Lensa Biaya]</span></h3>
+                <p>Memastikan setiap liter air memberikan nilai maksimal dan mendeteksi inefisiensi sistemik yang membebani biaya produksi.</p>
+              </div>
+            </article>
+            <article class="dna-card">
+              <div class="dna-icon blue">2</div>
+              <div class="dna-copy">
+                <h3>Resilience <span class="blue">[Lensa Stabilitas]</span></h3>
+                <p>Membangun benteng operasional yang lebih tangguh terhadap gangguan suplai eksternal agar proses tetap stabil.</p>
+              </div>
+            </article>
+            <article class="dna-card">
+              <div class="dna-icon green">3</div>
+              <div class="dna-copy">
+                <h3>Sustainability <span class="green">[Lensa Pertumbuhan]</span></h3>
+                <p>Menyelaraskan profit dengan kelestarian lingkungan melalui optimalisasi jejak air dan kesiapan pertumbuhan jangka panjang.</p>
+              </div>
+            </article>
           </div>
         </div>
 
@@ -1315,13 +1582,13 @@
             <strong>10+</strong>
             <small>Years of stability</small>
           </div>
-          <div class="stat-card">
-            <strong>2.160</strong>
-            <small>m³ per day reference</small>
+          <div class="stat-card blue">
+            <strong>78.1</strong>
+            <small>SPAM capacity million m³/year</small>
           </div>
-          <div class="stat-card">
-            <strong>1.000</strong>
-            <small>LPS acceleration reference</small>
+          <div class="stat-card dark">
+            <strong>Zero</strong>
+            <small>Capital risk via WaaS</small>
           </div>
         </div>
       </div>
@@ -1329,7 +1596,7 @@
 
     <section id="pathway" class="pathway">
       <div class="container">
-        <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
+        <div class="section-head center reveal">
           <p class="kicker">Strategic Pathway</p>
           <h2 class="font-display">Dari baseline saat ini menuju efisiensi terukur.</h2>
           <p>
@@ -1363,7 +1630,7 @@
 
     <section id="projects">
       <div class="container">
-        <div class="section-head reveal" style="text-align:center; margin-inline:auto;">
+        <div class="section-head center reveal">
           <p class="kicker">Featured Projects</p>
           <h2 class="font-display">Proven performance in strategic infrastructure.</h2>
           <p>
@@ -1400,6 +1667,29 @@
               </p>
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ecosystem">
+      <div class="container">
+        <div class="ecosystem-head reveal">
+          <p class="kicker">Strategic Ecosystem</p>
+          <h2 class="font-display">Trusted by industry giants.</h2>
+          <p>Ekosistem ini menunjukkan ragam partner dan institusi yang menjadi bagian dari jejak implementasi Invila™.</p>
+        </div>
+
+        <div class="ecosystem-grid reveal">
+          <article class="ecosystem-card"><div class="logo-pill"><img src="wika.png" alt="Wika"></div><p>Infrastructure</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="united-tractors.png" alt="United Tractors"></div><p>Energy</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="petrokimia-gresik.png" alt="Petrokimia Gresik"></div><p>Chemical</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="kiw.png" alt="KIW"></div><p>Industrial Zone</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="tirtanadi.png" alt="Tirtanadi"></div><p>Public Utility</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="tirta-asasta-depok.png" alt="Tirta Asasta Depok"></div><p>Water Services</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="kievit.png" alt="Kievit"></div><p>Global Food</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="patria-maritim-perkasa.png" alt="Patria Maritim Perkasa"></div><p>Maritime</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="cemerlang-samudra-kontrindo.png" alt="Cemerlang Samudra Kontrindo"></div><p>Construction</p></article>
+          <article class="ecosystem-card"><div class="logo-pill"><img src="dinkes depok.png" alt="Dinkes Depok"></div><p>Health</p></article>
         </div>
       </div>
     </section>
@@ -1459,8 +1749,7 @@
               </div>
             </div>
             <p class="audit-note">
-              Hasil ini bersifat simulasi awal untuk membantu pembacaan peluang efisiensi.
-              Langkah berikutnya adalah validasi data melalui pembahasan teknis dan factory visit.
+              Hasil ini bersifat simulasi awal untuk membantu pembacaan peluang efisiensi. Langkah berikutnya adalah validasi data melalui pembahasan teknis dan factory visit.
             </p>
           </div>
         </div>
@@ -1650,22 +1939,6 @@
       document.getElementById("btn-download").addEventListener("click", downloadPDF);
     }
 
-    function setupReveal() {
-      const reveals = document.querySelectorAll(".reveal");
-      const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-
-      reveals.forEach(function(element) {
-        observer.observe(element);
-      });
-    }
-
     function setupSmoothScroll() {
       const anchors = document.querySelectorAll("[data-scroll]");
       anchors.forEach(function(anchor) {
@@ -1684,11 +1957,8 @@
       setContactLinks();
       setupInputs();
       setupButtons();
-      setupReveal();
       setupSmoothScroll();
       renderResults();
-      const firstReveal = document.querySelector(".reveal");
-      if (firstReveal) firstReveal.classList.add("is-visible");
     });
   </script>
 </body>
