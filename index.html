@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Invila™ | Industrial Water Infrastructure Partner</title>
+    
+    <!-- Framework & Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- PDF Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root { 
+            --navy: #0f172a; 
+            --blue-p: #2563eb; 
+            --cyan-p: #06b6d4;
+            --gradiant-blue: #0066ff;
+            --gradiant-green: #10b981;
+            --gradiant-indigo: #6366f1;
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; 
+            background: #fff; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        .font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* KUNCI: Jarak sisi kiri & kanan proporsional untuk Android & iPhone */
+        .safe-container { @apply max-w-7xl mx-auto px-6 sm:px-10 md:px-12 lg:px-16; }
+
+        /* --- SEAMLESS INFINITE LOOP (UKURAN PROPORSIONAL & TERKUNCI) --- */
+        @keyframes scroll-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-wrapper { overflow: hidden; display: flex; width: 100%; position: relative; height: 80px; align-items: center; }
+        .marquee-content { 
+            display: flex; 
+            width: max-content; 
+            animation: scroll-marquee 40s linear infinite; 
+            align-items: center;
+        }
+        .marquee-wrapper:hover .marquee-content { animation-play-state: paused; }
+
+        /* Revisi Logo Marquee: Ukuran yang elegan (32px - 48px) */
+        .logo-item-marquee { 
+            height: 32px; /* Base height untuk mobile */
+            width: auto;
+            max-width: 150px;
+            object-fit: contain;
+            margin: 0 30px;
+            flex-shrink: 0;
+            transition: all 0.4s ease;
+        }
+        @media (min-width: 768px) {
+            .logo-item-marquee { height: 48px; margin: 0 50px; }
+        }
+
+        /* --- ECCENTRIC ANIMATION --- */
+        @keyframes rotate-eccentric {
+            0% { transform: rotate(0deg) translate(15%, 0) rotate(0deg); }
+            100% { transform: rotate(360deg) translate(15%, 0) rotate(-360deg); }
+        }
+        .animated-circle { position: absolute; border-radius: 50%; pointer-events: none; border-width: 2px !important; }
+        .circle-1 { width: 180px; height: 180px; border: 2px solid var(--gradiant-blue); animation: rotate-eccentric 10s linear infinite; }
+        .circle-2 { width: 210px; height: 210px; border: 2px dashed var(--gradiant-green); animation: rotate-eccentric 12s linear infinite reverse; }
+        .circle-3 { width: 240px; height: 240px; border: 2px solid var(--gradiant-indigo); animation: rotate-eccentric 15s linear infinite; }
+
+        @media (min-width: 768px) {
+            .circle-1 { width: 250px; height: 250px; }
+            .circle-2 { width: 290px; height: 290px; }
+            .circle-3 { width: 330px; height: 330px; }
+        }
+
+        @keyframes text-appearance {
+            0%, 25% { opacity: 0; transform: scale(0.9) translateY(10px); }
+            33%, 58% { opacity: 1; transform: scale(1) translateY(0); }
+            66%, 100% { opacity: 0; transform: scale(1.05) translateY(-10px); }
+        }
+        .cycle-text {
+            position: absolute; opacity: 0; animation: text-appearance 9s infinite;
+            @apply font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] whitespace-nowrap text-xs md:text-2xl;
+        }
+        .text-efficiency { animation-delay: 0s; color: var(--gradiant-blue); }
+        .text-sustainability { animation-delay: 3s; color: var(--gradiant-green); }
+        .text-resilience { animation-delay: 6s; color: var(--gradiant-indigo); }
+
+        /* --- STAT CIRCLES --- */
+        .stat-circle {
+            @apply w-[130px] h-[130px] sm:w-[150px] sm:h-[150px] md:w-[185px] md:h-[185px] rounded-full flex flex-col items-center justify-center text-center transition-all duration-500 border border-black/5 flex-shrink-0 bg-white shadow-sm;
+        }
+        .stat-circle:hover { transform: scale(1.05) translateY(-5px); @apply shadow-2xl; }
+
+        /* Logo Wall - Proporsional & Rapi (45px - 60px) */
+        .logo-wall-item { 
+            height: 45px;
+            width: auto;
+            max-width: 180px;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+        @media (min-width: 1024px) {
+            .logo-wall-item { height: 60px; }
+        }
+        .logo-wall-item:hover { transform: translateY(-5px) scale(1.05); }
+
+        .glass-panel { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .break-fix { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
+    </style>
+</head>
+<body class="text-slate-900">
+
+    <!-- NAVIGATION -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100">
+        <div class="safe-container py-4 md:py-5 flex justify-between items-center">
+            <a href="#" class="text-xl md:text-2xl font-[900] tracking-tighter text-slate-900 flex items-start uppercase leading-none">
+                INVILA<span class="text-blue-600 text-[10px] font-bold ml-0.5" style="vertical-align: super; line-height: 1;">TM</span>
+            </a>
+            <div class="hidden md:flex space-x-12 text-[10px] font-bold uppercase tracking-[0.25em] text-slate-500">
+                <a href="#drives-us" class="hover:text-blue-600 transition-all">Economics</a>
+                <a href="#roadmap" class="hover:text-blue-600 transition-all">Pathway</a>
+                <a href="#success-stories" class="hover:text-blue-600 transition-all">Stories</a>
+                <a href="#audit" class="hover:text-blue-600 transition-all">Intelligence</a>
+            </div>
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:bg-slate-900 transition-all active:scale-95">
+                Hubungi Partner
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="pt-32 md:pt-48 pb-12 md:pb-16 bg-white relative overflow-hidden">
+        <div class="safe-container relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 md:gap-16 items-center">
+                <div class="reveal active">
+                    <div class="inline-block px-4 py-1.5 mb-8 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest leading-none">
+                        Water-as-a-Service (WaaS) Model
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl md:text-7xl font-[900] text-slate-900 leading-[1.1] tracking-tighter mb-8 md:mb-10 italic break-fix">
+                        Mengubah Air Limbah Menjadi <span class="text-blue-600">Nilai Strategis.</span>
+                    </h1>
+                    <p class="text-xl text-slate-500 max-w-xl leading-relaxed mb-10 md:mb-12 break-fix">
+                        Melalui solusi <span class="text-slate-900 font-bold underline decoration-blue-200 underline-offset-8 italic">Zero-CapEx</span> Invila™, kami mentransformasi utilitas air industri menjadi aset operasional bersih.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#audit" class="bg-slate-900 text-white px-10 py-5 rounded-2xl font-bold uppercase text-xs tracking-widest hover:scale-105 transition-all shadow-2xl">Mulai Audit</a>
+                    </div>
+                </div>
+                <div class="relative reveal active lg:block">
+                    <div class="rounded-[40px] overflow-hidden border-[8px] border-white shadow-2xl aspect-video bg-slate-900 relative">
+                        <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-80">
+                            <source src="kiw-industrial-project-video.mp4" type="video/mp4">
+                            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1000" alt="Invila Industrial Facility">
+                        </video>
+                        <div class="absolute bottom-4 left-6 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <span class="text-[9px] font-bold text-white uppercase tracking-widest">DECN-IV™ System Live</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marquee Infinite Loop -->
+        <div class="mt-16 md:mt-24 border-y border-slate-100 py-4 md:py-6 bg-slate-50/50">
+            <div class="marquee-wrapper">
+                <div class="marquee-content">
+                    <img src="wika.png" class="logo-item-marquee" alt="Wika">
+                    <img src="united-tractors.png" class="logo-item-marquee" alt="United Tractors">
+                    <img src="petrokimia-gresik.png" class="logo-item-marquee" alt="Petrokimia Gresik">
+                    <img src="kievit.png" class="logo-item-marquee" alt="Kievit">
+                    <img src="kiw.png" class="logo-item-marquee" alt="KIW">
+                    <img src="tirtanadi.png" class="logo-item-marquee" alt="Tirtanadi">
+                    <img src="tirta-asasta-depok.png" class="logo-item-marquee" alt="Tirta Asasta">
+                    <img src="1tirta-asasta-citayam.png" class="logo-item-marquee" alt="Citayam">
+                    <img src="patria-maritim-perkasa.png" class="logo-item-marquee" alt="Patria">
+                    <!-- Duplicate Set -->
+                    <img src="wika.png" class="logo-item-marquee" alt="Wika">
+                    <img src="united-tractors.png" class="logo-item-marquee" alt="United Tractors">
+                    <img src="petrokimia-gresik.png" class="logo-item-marquee" alt="Petrokimia Gresik">
+                    <img src="kievit.png" class="logo-item-marquee" alt="Kievit">
+                    <img src="kiw.png" class="logo-item-marquee" alt="KIW">
+                    <img src="tirtanadi.png" class="logo-item-marquee" alt="Tirtanadi">
+                    <img src="tirta-asasta-depok.png" class="logo-item-marquee" alt="Tirta Asasta">
+                    <img src="1tirta-asasta-citayam.png" class="logo-item-marquee" alt="Citayam">
+                    <img src="patria-maritim-perkasa.png" class="logo-item-marquee" alt="Patria">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DNA SECTION: ECONOMICS OF WATER (Lingkaran di Kiri) -->
+    <section id="drives-us" class="py-24 md:py-32 bg-white overflow-hidden">
+        <div class="safe-container">
+            <div class="max-w-5xl mb-24 reveal">
+                <h2 class="text-blue-600 font-bold text-xs uppercase tracking-[0.4em] mb-6">Economics of Water</h2>
+                <h3 class="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] tracking-tighter mb-10 italic break-fix">
+                    Transformasi dari Utilitas <br>Menjadi Aset Strategis.
+                </h3>
+                <p class="text-xl md:text-2xl text-slate-500 leading-relaxed max-w-4xl break-fix">
+                    Bagi fasilitas industri modern, air tidak lagi bisa diposisikan sekadar sebagai utilitas pendukung—ia adalah komponen kritis dalam <span class="text-slate-900 font-bold italic">Cost of Goods Sold (COGS).</span>
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-[1fr_1.2fr] gap-16 md:gap-20 items-center mb-24">
+                
+                <!-- Visual Animation (Sisi KIRI) -->
+                <div class="relative flex justify-center items-center h-[400px] md:h-[500px] reveal lg:order-1 order-2">
+                    <div class="animated-circle circle-1"></div>
+                    <div class="animated-circle circle-2"></div>
+                    <div class="animated-circle circle-3"></div>
+                    <div class="flex flex-col justify-center items-center w-full relative z-10">
+                        <div class="text-efficiency cycle-text">Efficiency</div>
+                        <div class="text-sustainability cycle-text">Sustainability</div>
+                        <div class="text-resilience cycle-text">Resilience</div>
+                    </div>
+                </div>
+
+                <!-- Text Narrative (Sisi KANAN) -->
+                <div class="reveal lg:order-2 order-1">
+                    <p class="text-lg text-slate-600 leading-relaxed mb-12 break-fix">
+                        Tekanan dari limitasi Air Bawah Tanah (ABT), volatilitas tarif PDAM, serta tuntutan efisiensi energi dan standar lingkungan, kini menjadikan pengelolaan air sebagai faktor yang langsung memengaruhi <span class="text-slate-900 font-bold">biaya produksi, stabilitas operasional, dan daya saing bisnis.</span>
+                    </p>
+                    <p class="text-lg font-bold text-slate-900 mb-10 uppercase tracking-tight italic">Di Invila™, pengelolaan air dianalisis melalui tiga lensa strategis:</p>
+                    
+                    <div class="space-y-10">
+                        <div class="flex gap-6 group">
+                            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm"><i data-lucide="bar-chart-3" class="w-7 h-7"></i></div>
+                            <div>
+                                <h4 class="font-black text-slate-900 uppercase tracking-tight text-xl italic">1. Efficiency [Lensa Biaya]</h4>
+                                <p class="text-base text-slate-500 mt-2 italic break-fix">Memastikan setiap liter air memberikan nilai maksimal. Mendeteksi inefisiensi sistemik yang membebani struktur biaya produksi.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 group">
+                            <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm"><i data-lucide="shield-check" class="w-7 h-7"></i></div>
+                            <div>
+                                <h4 class="font-black text-slate-900 uppercase tracking-tight text-xl italic">2. Resilience [Lensa Stabilitas]</h4>
+                                <p class="text-base text-slate-500 mt-2 italic break-fix">Membangun benteng operasional tangguh terhadap gangguan suplai eksternal, memastikan rantai produksi tetap berjalan tanpa interupsi.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 group">
+                            <div class="w-14 h-14 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0 group-hover:bg-green-600 group-hover:text-white transition-all shadow-sm"><i data-lucide="leaf" class="w-7 h-7"></i></div>
+                            <div>
+                                <h4 class="font-black text-slate-900 uppercase tracking-tight text-xl italic">3. Sustainability [Lensa Pertumbuhan]</h4>
+                                <p class="text-base text-slate-500 mt-2 italic break-fix">Menyelaraskan profit dengan kelestarian alam. Membangun legacy hijau melalui optimalisasi jejak air.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAT CIRCLES -->
+            <div class="flex flex-wrap md:flex-row gap-8 justify-center items-center reveal pt-12">
+                <div class="stat-circle text-slate-900 border-slate-100">
+                    <div class="text-3xl md:text-4xl font-black text-blue-600 italic">10+</div>
+                    <div class="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-400 mt-2 leading-relaxed">Years of<br>Stability</div>
+                </div>
+                <div class="stat-circle bg-blue-600 text-white border-blue-500">
+                    <div class="text-3xl md:text-4xl font-black italic">833</div>
+                    <div class="text-[8px] uppercase tracking-[0.2em] font-bold opacity-80 mt-2 leading-relaxed">LPS Peak<br>Delivery</div>
+                </div>
+                <div class="stat-circle bg-slate-900 text-white border-slate-800">
+                    <div class="text-3xl md:text-4xl font-black text-cyan-400 italic">ZERO</div>
+                    <div class="text-[8px] uppercase tracking-[0.2em] font-bold opacity-60 mt-2 leading-relaxed">Capital<br>Risk (WaaS)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STRATEGIC PATHWAY -->
+    <section id="roadmap" class="py-24 md:py-32 bg-slate-50 relative overflow-hidden">
+        <div class="safe-container">
+            <div class="text-center max-w-4xl mx-auto mb-20 reveal">
+                <h2 class="text-blue-600 font-bold text-xs uppercase tracking-[0.4em] mb-4">Strategic Pathway</h2>
+                <h3 class="text-3xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter italic break-fix text-center">Dari Visi Menuju Efisiensi Terukur.</h3>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-12 rounded-[48px] border border-slate-100 flex flex-col reveal transition-all hover:shadow-2xl group">
+                    <div class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-bold mb-8 group-hover:bg-blue-600 transition-all text-xl shadow-lg">1</div>
+                    <h4 class="text-xl font-black text-slate-900 mb-4 uppercase italic italic font-bold">Data-Driven Assessment</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 flex-grow italic break-fix">Diagnosa mandiri potensi inefisiensi sistem saat ini melalui audit simulasi di bawah.</p>
+                    <p class="text-[11px] font-black text-blue-600 border-t border-slate-200 pt-6 uppercase tracking-[0.2em]">Output: Potensi ROI & Savings.</p>
+                </div>
+                <div class="bg-white p-12 rounded-[48px] border border-slate-100 flex flex-col reveal transition-all hover:shadow-2xl group" style="transition-delay: 0.1s;">
+                    <div class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-bold mb-8 group-hover:bg-blue-600 transition-all text-xl shadow-lg">2</div>
+                    <h4 class="text-xl font-black text-slate-900 mb-4 uppercase italic font-bold">Validation & Precision</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 flex-grow italic break-fix">Validasi melalui Technical Assessment (TCA) mendalam untuk presisi data lapangan.</p>
+                    <p class="text-[11px] font-black text-blue-600 border-t border-slate-200 pt-6 uppercase tracking-[0.2em]">Output: Kepastian Nilai Efisiensi.</p>
+                </div>
+                <div class="bg-white p-12 rounded-[48px] border border-slate-100 flex flex-col reveal transition-all hover:shadow-2xl group" style="transition-delay: 0.2s;">
+                    <div class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-bold mb-8 group-hover:bg-blue-600 transition-all text-xl shadow-lg">3</div>
+                    <h4 class="text-xl font-black text-slate-900 mb-4 uppercase italic font-bold">Zero-CapEx Implementation</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 flex-grow italic break-fix">Instalasi infrastruktur tanpa risiko modal awal melalui model Water-as-a-Service.</p>
+                    <p class="text-[11px] font-black text-blue-600 border-t border-slate-200 pt-6 uppercase tracking-[0.2em]">Output: Tanpa Risiko Modal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STRATEGIC PARTNERS GRID (Positioned Above Projects) -->
+    <section class="py-24 md:py-32 bg-white border-y border-slate-100">
+        <div class="safe-container text-center">
+            <h2 class="text-blue-600 font-bold text-xs uppercase tracking-[0.5em] mb-4 reveal">Trusted by Industry Giants</h2>
+            <h3 class="text-3xl md:text-5xl font-black text-slate-900 italic mb-16 md:mb-24 reveal uppercase tracking-tight">Strategic Ecosystem</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-x-12 gap-y-12 items-center justify-items-center">
+                <img src="wika.png" class="logo-wall-item" alt="Wika">
+                <img src="united-tractors.png" class="logo-wall-item" alt="UT">
+                <img src="petrokimia-gresik.png" class="logo-wall-item" alt="Petrokimia">
+                <img src="kiw.png" class="logo-wall-item" alt="KIW">
+                <img src="tirtanadi.png" class="logo-wall-item" alt="Tirtanadi">
+                <img src="tirta-asasta-depok.png" class="logo-wall-item" alt="Tirta Asasta">
+                <img src="1tirta-asasta-citayam.png" class="logo-wall-item" alt="Citayam">
+                <img src="kievit.png" class="logo-wall-item" alt="Kievit">
+                <img src="patria-maritim-perkasa.png" class="logo-wall-item" alt="Patria">
+                <img src="cemerlang-samudra-kontrindo.png" class="logo-wall-item" alt="CSK">
+                <img src="dinkes depok.png" class="logo-wall-item" alt="Dinkes">
+                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight text-left border-l-2 border-slate-200 pl-6 italic">DAN BERBAGAI<br>MITRA GLOBAL...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUCCESS STORIES (Proven Performance) -->
+    <section id="success-stories" class="py-24 md:py-32 bg-slate-50">
+        <div class="safe-container">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-blue-600 font-bold text-xs uppercase tracking-[0.5em] mb-6">Featured Projects</h2>
+                <h3 class="text-4xl md:text-7xl font-[900] text-slate-900 tracking-tighter italic break-fix text-center">Proven Performance.</h3>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="group reveal">
+                    <div class="relative rounded-[48px] overflow-hidden bg-slate-100 aspect-[16/10] mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1516937941344-00b4e0337589?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="KIW Project">
+                        <div class="absolute top-6 left-6 bg-white/95 backdrop-blur px-5 py-3 rounded-2xl shadow-xl border border-black/5">
+                            <img src="kiw.png" style="height: 30px; width: auto; object-fit: contain;" alt="KIW">
+                        </div>
+                    </div>
+                    <h5 class="text-2xl font-black text-slate-900 mb-6 leading-tight uppercase italic break-fix">SCALABLE WAAS: KIW SEMARANG (2.160 M³/HARI)</h5>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 italic break-fix">Implementasi SPAM Modular 4.0 dan infrastruktur **Zero-CapEx**. Menjamin kestabilan bekalan 24/7 yang adaptif terhadap pertumbuhan tenant.</p>
+                </div>
+
+                <div class="group reveal" style="transition-delay: 0.1s;">
+                    <div class="relative rounded-[48px] overflow-hidden bg-slate-100 aspect-[16/10] mb-8 shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Tirtanadi Project">
+                        <div class="absolute top-6 left-6 bg-white/95 backdrop-blur px-5 py-3 rounded-2xl shadow-xl border border-black/5">
+                            <img src="tirtanadi.png" style="height: 40px; width: auto; object-fit: contain;" alt="Tirtanadi">
+                        </div>
+                    </div>
+                    <h5 class="text-2xl font-black text-slate-900 mb-6 leading-tight uppercase italic break-fix">TRANSFORMASI AIR MINUM KOTA MEDAN (1.000 LPS)</h5>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-8 italic break-fix">Akselerasi debit total 1.000 LPS melalui teknologi **Hybrid Lamella** dan **Static Mixing** Invila™ pada SPAM Tirtanadi Sunggal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTELLIGENCE AUDIT CALCULATOR -->
+    <section id="audit" class="py-24 md:py-32 bg-[#020617] text-white font-jakarta">
+        <div class="safe-container">
+            <div class="max-w-4xl mb-20 reveal">
+                <h3 class="text-cyan-400 font-bold text-2xl md:text-3xl mb-8 tracking-tight uppercase break-fix">
+                    Invila™ Intelligence: <span class="font-light text-white">Saving Audit</span>
+                </h3>
+                <p class="text-xl text-slate-400 leading-relaxed mb-10 break-fix">
+                    Langkah paling rasional untuk memulakan transformasi ini adalah dengan memahami kondisi aktual fasiliti. Invila™ Intelligence menerjemahkan parameter operasional menjadi pemetaan potensi nyata.
+                </p>
+                <blockquote class="text-2xl md:text-4xl font-extralight text-cyan-300 italic border-l-4 border-cyan-400 pl-8 mb-12 break-fix leading-snug">
+                    "Data adalah titik permulaan daripada pengoptimuman yang presisi."
+                </blockquote>
+                <div class="flex flex-col sm:flex-row gap-6 pt-4">
+                    <button onclick="downloadPDF()" id="btn-download" class="px-10 py-5 bg-rose-500 rounded-3xl text-xs font-bold uppercase tracking-widest shadow-2xl hover:bg-rose-600 transition-all flex items-center justify-center gap-4">
+                        <i data-lucide="file-text" class="w-5 h-5"></i> Download PDF Ringkasan
+                    </button>
+                    <button id="btn-update" class="px-10 py-5 bg-slate-800 text-slate-500 rounded-3xl text-xs font-bold uppercase tracking-widest cursor-not-allowed transition-all flex justify-center">Data Tersinkron</button>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-[450px_1fr] gap-12 md:gap-20 reveal">
+                <div class="glass-panel p-10 md:p-14 rounded-[4rem] space-y-10 border-white/5 shadow-2xl">
+                    <div class="flex items-center gap-5 mb-4">
+                        <div class="w-12 h-12 bg-cyan-500 rounded-xl flex items-center justify-center text-slate-900 font-black text-xl shadow-lg">IV</div>
+                        <span class="text-xs font-black uppercase tracking-[0.3em]">Intelligence Input</span>
+                    </div>
+                    <div class="grid gap-3">
+                        <label class="text-[10px] uppercase text-slate-500 font-bold tracking-widest italic pl-1">Debit Produksi (m³/hari)</label>
+                        <input type="text" id="input-flow" data-key="flowRate" class="input-comma w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-4xl font-black outline-none focus:border-cyan-400 transition-all" value="1,500">
+                    </div>
+                    <div class="grid gap-3">
+                        <label class="text-[10px] uppercase text-slate-500 font-bold tracking-widest italic pl-1">Legacy Cost (Rp/m³)</label>
+                        <input type="text" id="input-legacy" data-key="legacyCost" class="input-comma w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-4xl font-black outline-none focus:border-cyan-400 transition-all" value="14,600">
+                    </div>
+                    <div class="grid gap-3">
+                        <label class="text-[10px] uppercase text-slate-500 font-bold tracking-widest italic pl-1">Tarif Invila™ WaaS (Rp/m³)</label>
+                        <input type="text" id="input-tariff" data-key="invilaTariff" class="input-comma w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-4xl font-black text-cyan-400 outline-none focus:border-cyan-400 transition-all" value="5,500">
+                    </div>
+                    <div class="grid gap-3">
+                        <label class="text-[10px] uppercase text-slate-500 font-bold tracking-widest italic pl-1">Ref CAPEX (Rp/LPS)</label>
+                        <input type="text" id="input-capex" data-key="capexPerLps" class="input-comma w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-6 text-2xl font-black text-white outline-none focus:border-cyan-400 transition-all" value="350,000,000">
+                    </div>
+                </div>
+
+                <div class="space-y-12">
+                    <div class="bg-gradient-to-br from-slate-900 to-black p-12 md:p-24 rounded-[5rem] border border-white/5 shadow-2xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-600/10 blur-[150px]"></div>
+                        <span class="text-blue-400 font-bold text-sm uppercase tracking-[0.5em]">Monthly Potential Saving</span>
+                        <h2 id="view-monthly-saving" class="text-5xl sm:text-7xl md:text-[110px] font-black tracking-tighter mt-12 leading-none italic transition-all duration-500 break-fix">Rp 0</h2>
+                    </div>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="glass-panel p-10 rounded-[3rem] border-white/5">
+                            <div class="text-[10px] uppercase font-bold text-slate-500 mb-3 tracking-widest italic">Annual Saving</div>
+                            <div id="view-annual-saving" class="text-2xl md:text-3xl font-black italic">Rp 0</div>
+                        </div>
+                        <div class="glass-panel p-10 rounded-[3rem] border-rose-500/20">
+                            <div class="text-[10px] uppercase font-bold text-slate-500 mb-3 tracking-widest italic">5-Year Strategy</div>
+                            <div id="view-five-year-saving" class="text-2xl md:text-3xl font-black text-rose-400 italic">Rp 0</div>
+                        </div>
+                        <div class="glass-panel p-10 rounded-[3rem] border-cyan-400/20 col-span-full lg:col-span-1">
+                            <div class="text-[10px] uppercase font-bold text-slate-500 mb-3 tracking-widest font-bold italic">CapEx Avoided</div>
+                            <div id="view-capex-value" class="text-2xl md:text-3xl font-black text-cyan-300 italic">Rp 0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-50 py-24 border-t border-slate-100">
+        <div class="safe-container text-center">
+            <div class="text-3xl font-black tracking-tighter text-navy mb-10 uppercase italic">
+                INVILA<sup class="text-blue-600 text-[12px] ml-1">TM</sup>
+            </div>
+            <p class="text-[11px] text-slate-400 font-bold uppercase tracking-[0.4em] italic px-4">© 2026 Invila.asia | Strategic Infrastructure Group</p>
+        </div>
+    </footer>
+
+    <!-- PDF TEMPLATE (HIDDEN) -->
+    <div style="position: absolute; top: -9999px; left: -9999px;">
+        <div id="pdf-template" style="width: 210mm; padding: 25mm; background: white; color: #0f172a; font-family: 'Inter', sans-serif;">
+            <div style="border-bottom: 3px solid #0f172a; padding-bottom: 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <div style="font-size: 8px; font-weight: 800; color: #3b82f6; letter-spacing: 2px; margin-bottom: 5px;">CONFIDENTIAL INDUSTRIAL REPORT</div>
+                    <h1 style="font-size: 24px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase;">Saving Audit Summary</h1>
+                </div>
+                <div style="font-size: 14px; font-weight: 900; letter-spacing: -1px;">INVILA™ INTELLIGENCE</div>
+            </div>
+            <h2 style="font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 30px;">Financial upside of shifting to Invila™.</h2>
+            <div id="pdf-monthly-saving" style="font-size: 60px; font-weight: 900; color: #0f172a; letter-spacing: -3px; line-height: 1; margin-bottom: 30px;">-</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;">
+                <div style="background: #f1f5f9; padding: 25px; border-radius: 24px; border-left: 5px solid #0f172a;">
+                    <div style="font-size: 8px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Penghematan Tahunan</div>
+                    <div id="pdf-annual-saving-p" style="font-size: 22px; font-weight: 900; color: #0f172a; margin-top: 8px;">-</div>
+                </div>
+                <div style="background: #f1f5f9; padding: 25px; border-radius: 24px; border-left: 5px solid #0066ff;">
+                    <div style="font-size: 8px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Komitmen CapEx Dihindari</div>
+                    <div id="pdf-capex-avoided-p" style="font-size: 22px; font-weight: 900; color: #0f172a; margin-top: 8px;">-</div>
+                </div>
+            </div>
+            <div style="background: #eff6ff; padding: 30px; border-radius: 24px; border: 1px solid #dbeafe;">
+                <h4 style="font-size: 12px; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; font-style: italic;">Catatan: Angka ini bukan hayalan.</h4>
+                <p style="font-size: 10px; color: #1e40af; line-height: 1.6;">Bagi Invila™, inilah alasan transformasi menjadi WaaS Provider: karena klien membutuhkan hasil yang terus bekerja. Dengan teknologi yang sudah proven untuk melayani air publik dan industri raksasa, model Zero-CapEx kami mengubah biaya tetap yang membebani menjadi kinerja operasional yang lebih terukur. Angka ini adalah refleksi nyata keandalan sistem kami.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) reveals[i].classList.add("active");
+            }
+        }
+        window.addEventListener("scroll", reveal);
+
+        const CONFIG = { flowRate: 1500, legacyCost: 14600, invilaTariff: 5500, capexPerLps: 350000000 };
+        let activeValues = { ...CONFIG };
+        let draftValues = { ...CONFIG };
+
+        const formatRp = (v) => {
+            const abs = Math.abs(v);
+            if (abs >= 1e9) return `Rp ${(v / 1e9).toFixed(2)} Miliar`;
+            if (abs >= 1e6) return `Rp ${(v / 1e6).toFixed(1)} Juta`;
+            return `Rp ${Math.round(v).toLocaleString("id-ID")}`;
+        };
+
+        const calculate = (vals) => {
+            const monthly = (vals.legacyCost - vals.invilaTariff) * vals.flowRate * 30;
+            const annual = monthly * 12;
+            const fiveYear = annual * 5;
+            const capex = (vals.flowRate / 86.4) * vals.capexPerLps;
+            return { monthly, annual, fiveYear, capex };
+        };
+
+        const updateUI = () => {
+            const res = calculate(activeValues);
+            document.getElementById('view-monthly-saving').innerText = formatRp(res.monthly);
+            document.getElementById('view-annual-saving').innerText = formatRp(res.annual);
+            document.getElementById('view-five-year-saving').innerText = formatRp(res.fiveYear);
+            document.getElementById('view-capex-value').innerText = formatRp(res.capex);
+
+            document.getElementById('pdf-monthly-saving').innerText = formatRp(res.monthly);
+            document.getElementById('pdf-annual-saving-p').innerText = formatRp(res.annual);
+            document.getElementById('pdf-capex-avoided-p').innerText = formatRp(res.capex);
+
+            checkSync();
+        };
+
+        const checkSync = () => {
+            const isDirty = JSON.stringify(draftValues) !== JSON.stringify(activeValues);
+            const btn = document.getElementById('btn-update');
+            if (isDirty) {
+                btn.classList.replace('bg-slate-800', 'bg-cyan-400');
+                btn.classList.replace('text-slate-500', 'text-black');
+                btn.classList.remove('cursor-not-allowed');
+                btn.innerText = "Perbarui Hasil Audit";
+            } else {
+                btn.classList.replace('bg-cyan-400', 'bg-slate-800');
+                btn.classList.replace('text-black', 'text-slate-500');
+                btn.classList.add('cursor-not-allowed');
+                btn.innerText = "Data Tersinkron";
+            }
+        };
+
+        document.querySelectorAll('.input-comma').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const key = e.target.dataset.key;
+                const numeric = e.target.value.replace(/\D/g, "");
+                draftValues[key] = numeric ? parseInt(numeric) : 0;
+                e.target.value = draftValues[key].toLocaleString("en-US");
+                checkSync();
+            });
+        });
+
+        document.getElementById('btn-update').addEventListener('click', () => {
+            activeValues = { ...draftValues };
+            updateUI();
+        });
+
+        async function downloadPDF() {
+            const btn = document.getElementById('btn-download');
+            const original = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Membuat...`;
+            btn.disabled = true;
+            lucide.createIcons();
+            
+            try {
+                const template = document.getElementById('pdf-template');
+                template.parentElement.style.position = 'static';
+                const canvas = await html2canvas(template, { scale: 2, useCORS: true });
+                template.parentElement.style.position = 'absolute';
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF("p", "mm", "a4");
+                pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, 210, 297);
+                pdf.save(`Invila-Audit-Report-${new Date().getTime()}.pdf`);
+            } catch (e) { alert("Pembuatan PDF Gagal"); }
+            finally { btn.innerHTML = original; btn.disabled = false; lucide.createIcons(); }
+        }
+
+        window.onload = () => { reveal(); updateUI(); };
+    </script>
+</body>
+</html>
