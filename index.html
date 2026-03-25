@@ -360,14 +360,35 @@
     .cards-3,
     .reference-grid,
     .stats-row,
-    .logo-grid,
     .result-grid {
       display: grid;
       gap: 18px;
     }
 
     .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-    .logo-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; align-items: center; }
+
+    .logo-marquee {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    }
+
+    .logo-track {
+      display: flex;
+      width: max-content;
+      animation: logo-marquee 34s linear infinite;
+      will-change: transform;
+    }
+
+    .logo-group {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding-right: 14px;
+      flex-shrink: 0;
+    }
     .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .reference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
     .stats-row { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 34px; }
@@ -415,9 +436,10 @@
 
     .logo-pill {
       min-height: 58px;
+      min-width: 186px;
       display: grid;
       place-items: center;
-      padding: 10px 14px;
+      padding: 10px 18px;
       border-radius: 18px;
       background: #fff;
       color: var(--muted-2);
@@ -425,6 +447,7 @@
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
+      flex: 0 0 auto;
     }
 
     .logo-pill img {
@@ -435,7 +458,7 @@
       object-fit: contain;
       filter: grayscale(1);
       opacity: 0.82;
-      transition: opacity 0.2s ease, filter 0.2s ease;
+      transition: opacity 0.25s ease, filter 0.25s ease;
     }
 
     .logo-pill:hover img {
@@ -988,6 +1011,11 @@
       to { transform: rotate(360deg); }
     }
 
+    @keyframes logo-marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
     @media (max-width: 1080px) {
       .hero-grid,
       .economics-grid,
@@ -1004,7 +1032,12 @@
       .result-grid,
       .stats-row,
       .metrics { grid-template-columns: 1fr; }
-      .logo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .logo-pill {
+        min-width: 168px;
+      }
+      .logo-track {
+        animation-duration: 30s;
+      }
       .nav-links { display: none; }
       .hero { padding-top: 48px; }
       .hero-panel,
@@ -1065,9 +1098,12 @@
       .button-pdf,
       .button-sync,
       .nav-cta { width: 100%; }
-      .logo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .logo-track {
+        animation-duration: 24s;
+      }
       .logo-pill {
         min-height: 54px;
+        min-width: 148px;
         padding: 8px 12px;
       }
       .logo-pill img { max-height: 28px; }
@@ -1182,17 +1218,35 @@
       </div>
 
       <div class="logo-strip">
-        <div class="container logo-grid reveal" aria-label="Selected references">
-          <div class="logo-pill"><img src="wika.png" alt="WIKA" /></div>
-          <div class="logo-pill"><img src="united-tractors.png" alt="United Tractors" /></div>
-          <div class="logo-pill"><img src="petrokimia-gresik.png" alt="Petrokimia Gresik" /></div>
-          <div class="logo-pill"><img src="kiw.png" alt="KIW" /></div>
-          <div class="logo-pill"><img src="tirtanadi.png" alt="Tirtanadi" /></div>
-          <div class="logo-pill"><img src="kievit.png" alt="Kievit" /></div>
-          <div class="logo-pill"><img src="patria-maritim-perkasa.png" alt="Patria Maritim Perkasa" /></div>
-          <div class="logo-pill"><img src="cemerlang-samudra-kontrindo.png" alt="Cemerlang Samudra Kontrindo" /></div>
-          <div class="logo-pill"><img src="dinkes depok.png" alt="Dinkes Depok" /></div>
-          <div class="logo-pill"><img src="tirta-asasta-depok.png" alt="Tirta Asasta Depok" /></div>
+        <div class="container reveal">
+          <div class="logo-marquee" aria-label="Selected references">
+            <div class="logo-track">
+              <div class="logo-group">
+                <div class="logo-pill"><img src="wika.png" alt="WIKA" /></div>
+                <div class="logo-pill"><img src="united-tractors.png" alt="United Tractors" /></div>
+                <div class="logo-pill"><img src="petrokimia-gresik.png" alt="Petrokimia Gresik" /></div>
+                <div class="logo-pill"><img src="kiw.png" alt="KIW" /></div>
+                <div class="logo-pill"><img src="tirtanadi.png" alt="Tirtanadi" /></div>
+                <div class="logo-pill"><img src="kievit.png" alt="Kievit" /></div>
+                <div class="logo-pill"><img src="patria-maritim-perkasa.png" alt="Patria Maritim Perkasa" /></div>
+                <div class="logo-pill"><img src="cemerlang-samudra-kontrindo.png" alt="Cemerlang Samudra Kontrindo" /></div>
+                <div class="logo-pill"><img src="dinkes depok.png" alt="Dinkes Depok" /></div>
+                <div class="logo-pill"><img src="tirta-asasta-depok.png" alt="Tirta Asasta Depok" /></div>
+              </div>
+              <div class="logo-group" aria-hidden="true">
+                <div class="logo-pill"><img src="wika.png" alt="" /></div>
+                <div class="logo-pill"><img src="united-tractors.png" alt="" /></div>
+                <div class="logo-pill"><img src="petrokimia-gresik.png" alt="" /></div>
+                <div class="logo-pill"><img src="kiw.png" alt="" /></div>
+                <div class="logo-pill"><img src="tirtanadi.png" alt="" /></div>
+                <div class="logo-pill"><img src="kievit.png" alt="" /></div>
+                <div class="logo-pill"><img src="patria-maritim-perkasa.png" alt="" /></div>
+                <div class="logo-pill"><img src="cemerlang-samudra-kontrindo.png" alt="" /></div>
+                <div class="logo-pill"><img src="dinkes depok.png" alt="" /></div>
+                <div class="logo-pill"><img src="tirta-asasta-depok.png" alt="" /></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
