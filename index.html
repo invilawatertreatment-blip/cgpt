@@ -552,12 +552,30 @@
       place-items: center;
       background: linear-gradient(180deg, #f8fbff, #ffffff);
       isolation: isolate;
+      overflow: hidden;
+      contain: layout paint;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+
+    .orbit-stage {
+      position: absolute;
+      inset: 14px;
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(248,250,252,0.96), rgba(241,245,249,0.94));
+      border: 1px solid rgba(15, 23, 42, 0.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.82);
+      z-index: 0;
+      pointer-events: none;
     }
 
     .orbit-assembly {
       position: absolute;
-      inset: 0;
+      inset: 14px;
       pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+      border-radius: 32px;
     }
 
     .orbit-wrapper {
@@ -566,12 +584,19 @@
       top: 50%;
       width: 0;
       height: 0;
-      transform-origin: center center;
+      transform-origin: 0 0;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      animation-name: orbit-spin;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-fill-mode: both;
     }
 
-    .orbit-wrapper.one { animation: orbit-eccentric-a 12s linear infinite; }
-    .orbit-wrapper.two { animation: orbit-eccentric-b 15s linear infinite reverse; }
-    .orbit-wrapper.three { animation: orbit-eccentric-c 18s linear infinite; }
+    .orbit-wrapper.one { animation-duration: 12s; }
+    .orbit-wrapper.two { animation-duration: 15s; animation-direction: reverse; }
+    .orbit-wrapper.three { animation-duration: 18s; }
 
     .orbit-core {
       position: relative;
@@ -596,6 +621,9 @@
       position: absolute;
       border-radius: 50%;
       background: transparent;
+      will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
 
     .orbit-wrapper.one .ring {
@@ -955,20 +983,8 @@
       to { transform: rotate(360deg); }
     }
 
-    @keyframes orbit-eccentric-a {
+    @keyframes orbit-spin {
       from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes orbit-eccentric-b {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes orbit-eccentric-c {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
       to { transform: rotate(360deg); }
     }
 
@@ -987,8 +1003,8 @@
       .reference-grid,
       .result-grid,
       .stats-row,
-      .logo-grid,
       .metrics { grid-template-columns: 1fr; }
+      .logo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .nav-links { display: none; }
       .hero { padding-top: 48px; }
       .hero-panel,
@@ -997,8 +1013,39 @@
       .glass,
       .hero-result,
       .cta-box { padding: 24px; }
-      .orbit-card { min-height: 320px; }
-      
+      .orbit-card { min-height: 360px; }
+      .orbit-stage,
+      .orbit-assembly { inset: 12px; border-radius: 28px; }
+      .orbit-core {
+        width: 156px;
+        height: 156px;
+        font-size: 20px;
+      }
+      .orbit-wrapper.one .ring {
+        width: 180px;
+        height: 180px;
+        left: -102px;
+        top: -88px;
+      }
+      .orbit-wrapper.two .ring {
+        width: 248px;
+        height: 248px;
+        left: -136px;
+        top: -112px;
+      }
+      .orbit-wrapper.three .ring {
+        width: 314px;
+        height: 314px;
+        left: -170px;
+        top: -144px;
+      }
+      .orbit-label {
+        font-size: 11px;
+        padding: 9px 12px;
+      }
+      .orbit-label.top { top: 34px; }
+      .orbit-label.right { right: 10px; }
+      .orbit-label.bottom { bottom: 36px; }
     }
 
     @media (max-width: 640px) {
@@ -1018,9 +1065,61 @@
       .button-pdf,
       .button-sync,
       .nav-cta { width: 100%; }
+      .logo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .logo-pill {
+        min-height: 54px;
+        padding: 8px 12px;
+      }
+      .logo-pill img { max-height: 28px; }
       .stat-card { min-height: 156px; border-radius: 32px; }
       .hero-result h3 { font-size: clamp(42px, 14vw, 70px); }
       .input-group input { height: 68px; font-size: 28px; }
+      .orbit-card { min-height: 320px; }
+      .orbit-stage,
+      .orbit-assembly { inset: 10px; border-radius: 24px; }
+      .orbit-core {
+        width: 138px;
+        height: 138px;
+        font-size: 18px;
+      }
+      .orbit-wrapper.one .ring {
+        width: 158px;
+        height: 158px;
+        left: -90px;
+        top: -78px;
+      }
+      .orbit-wrapper.two .ring {
+        width: 214px;
+        height: 214px;
+        left: -118px;
+        top: -96px;
+      }
+      .orbit-wrapper.three .ring {
+        width: 270px;
+        height: 270px;
+        left: -146px;
+        top: -122px;
+      }
+      .orbit-label {
+        font-size: 10px;
+        padding: 8px 11px;
+        letter-spacing: 0.1em;
+      }
+      .orbit-label.top {
+        top: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .orbit-label.right {
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .orbit-label.bottom {
+        bottom: 26px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
   </style>
 </head>
@@ -1093,8 +1192,7 @@
           <div class="logo-pill"><img src="patria-maritim-perkasa.png" alt="Patria Maritim Perkasa" /></div>
           <div class="logo-pill"><img src="cemerlang-samudra-kontrindo.png" alt="Cemerlang Samudra Kontrindo" /></div>
           <div class="logo-pill"><img src="dinkes depok.png" alt="Dinkes Depok" /></div>
-          <div class="logo-pill"><img src="asasta citayam.png" alt="Asasta Citayam" /></div>
-          <div class="logo-pill"><img src="asasta legong.png" alt="Asasta Legong" /></div>
+          <div class="logo-pill"><img src="tirta-asasta-depok.png" alt="Tirta Asasta Depok" /></div>
         </div>
       </div>
     </section>
@@ -1145,6 +1243,7 @@
           </div>
 
           <div class="panel orbit-card reveal" aria-hidden="true">
+            <div class="orbit-stage"></div>
             <div class="orbit-assembly">
               <div class="orbit-wrapper one"><div class="ring"></div></div>
               <div class="orbit-wrapper two"><div class="ring"></div></div>
